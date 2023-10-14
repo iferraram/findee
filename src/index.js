@@ -1,29 +1,32 @@
-import express from 'express';
-import cors  from 'cors';
-import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
-import morgan from 'morgan';
-import passport from 'passport';
+// server.js
 
-import config from './config';
-import connect from './server/models';
-import authRoutes from './server/routes/auth';
-import authCheckMiddleware from './server/middleware/auth-check';
-import getLocalSignupStrategy from './server/passport/local-signup';
-import getLocalLoginStrategy from './server/passport/local-login';
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 
-connect(config.dbUri);
+const connectToDatabase = require('./config/db');
+const configurePassport = require('./config/passport');
+const authRoutes = require('./routes/auth');
+const authCheckMiddleware = require('./middlewares/authCheck');
+
+dotenv.config();
+const uri = process.env.DB_CONNECT;
 
 const app = express();
+
+// Middleware
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.static('./server/static/'));
 app.use(bodyParser.json());
 
-const User = mongoose.model('User');
-app.use(passport.initialize());
-passport.use('local-signup', getLocalSignupStrategy(User));
-passport.use('local-login', getLocalLoginStrategy(User));
+// Database connection
+connectToDatabase(uri);
+
+// Passport configuration
+configurePassport(app);
 
 app.use('/api', authCheckMiddleware);
 app.use('/auth', authRoutes);

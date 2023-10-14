@@ -1,9 +1,7 @@
-import mongoose from 'mongoose';
-
-import UserSchema from './schemas/user';
+const mongoose = require('mongoose');
 
 const connect = (uri) => {
-  mongoose.connect(uri, {useMongoClient: true});
+  mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   mongoose.Promise = global.Promise;
 
   mongoose.connection.on('error', (err) => {
@@ -11,7 +9,6 @@ const connect = (uri) => {
     process.exit(1);
   });
 
-  mongoose.model('User', UserSchema);
 };
 
-export default connect;
+module.exports = connect;
