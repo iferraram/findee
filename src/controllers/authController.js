@@ -1,14 +1,15 @@
 const passport = require('passport');
-const createErrorObject = require('../middlewares/createErrorObject');
-const handleResponse = require('../middlewares/handleResponse');
-const validateBasicSignInSignUpForm = require('../middlewares/validateBasicSignInSignUpForm');
-const validateSignUpForm = require('../middlewares/validateSignUpForm');
+const createErrorObject = require('../helpers/responses/createErrorObject');
+const handleResponse = require('../helpers/responses/handleResponse');
+const validateBasicSignInSignUpForm = require('../helpers/auth/validateBasicSignInSignUpForm');
+const validateSignUpForm = require('../helpers/auth/validateSignUpForm');
 
 const handleSignUp = (req, res, next) => {
   const validationErrors = validateSignUpForm(req.body);
 
   if (Object.keys(validationErrors).length === 0) {
     passport.authenticate('local-signup', (err) => {
+      console.log(err)
       if (err) {
         const field = err.name === 'MongoError' && err.code === 11000 ? 'email' : '';
         const code = field ? 'DUPLICATED_EMAIL' : 'FORM_SUBMISSION_FAILED';

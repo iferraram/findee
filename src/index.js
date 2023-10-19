@@ -9,11 +9,11 @@ const dotenv = require('dotenv');
 const connectToDatabase = require('./config/db');
 const configurePassport = require('./config/passport');
 const authRoutes = require('./routes/auth');
+const routes = require('./routes');
 const authCheckMiddleware = require('./middlewares/authCheck');
 
 dotenv.config();
 const uri = process.env.DB_CONNECT;
-
 const app = express();
 
 // Middleware
@@ -28,7 +28,7 @@ connectToDatabase(uri);
 // Passport configuration
 configurePassport(app);
 
-app.use('/api', authCheckMiddleware);
+app.use('/api', authCheckMiddleware, routes);
 app.use('/auth', authRoutes);
 
 app.set('port', (process.env.PORT || 8000));

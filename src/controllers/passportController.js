@@ -15,7 +15,6 @@ const getlocalLogin = (User) => new PassportLocalStrategy({
     if (!user) {
       return done({ code: 'INCORRECT_CREDENTIALS' });
     }
-
     const matched = await user.comparePassword(password.trim());
 
     if (!matched) {
@@ -24,11 +23,11 @@ const getlocalLogin = (User) => new PassportLocalStrategy({
 
     done(null, sign({ sub: user._id }, secret), {
       email: user.email,
-      name: user.name
+      username: user.username
     });
   } catch (e) {
     console.error(e);
-    done({ code: 'FORM_SUBMISSION_FAILED', info: e });
+    done({ code: 'LOGIN_FORM_SUBMISSION_FAILED', info: e });
   }
 });
 
@@ -42,7 +41,7 @@ const getlocalSignup = (User) => new PassportLocalStrategy({
     const newUser = new User({
       email: email.trim(),
       password: password.trim(),
-      name: req.body.name.trim(),
+      username: req.body.username.trim(),
     });
   
     try {

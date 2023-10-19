@@ -1,4 +1,5 @@
 const { isEmail } = require('validator');
+const createErrorObject = require('../responses/createErrorObject');
 
 const validateBasicSignInSignUpForm = (formData) => {
   const errors = {};
@@ -6,7 +7,6 @@ const validateBasicSignInSignUpForm = (formData) => {
   if (!formData?.email || !isEmail(formData.email)) {
     errors.email = createErrorObject('INVALID_EMAIL');
   }
-
   return errors;
 };
 
