@@ -165,7 +165,7 @@ exports.deleteEvent = async (req, res) => {
 // get events by categories
 exports.getAllEventsByCategories = async (req, res) => {
     try {
-        const { category, mood, popularity, rating, grouping_preference, activity_objective, atmosphere, price, page = 1, pageSize = 10 } = req.query;        
+        const { category, mood, popularity, rating, grouping_preference, activity_objective, atmosphere, price, page = 1, pageSize = 10, event_time, start_time, end_time } = req.query;        
         let query= { 
             category, 
             mood, 
@@ -179,7 +179,9 @@ exports.getAllEventsByCategories = async (req, res) => {
             pageSize,
             page,
             created_at,
-            event_time
+            event_time,
+            start_time, 
+            end_time 
         }
         query= JSON.parse(JSON.stringify(query));  
 

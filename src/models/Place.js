@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const timestamps =require( 'mongoose-timestamp');
+const mongoose = require("mongoose");
+const timestamps = require("mongoose-timestamp");
 
 const placeSchema = new mongoose.Schema({
   name: {
@@ -7,72 +7,81 @@ const placeSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  description: {
-    type: String,
-    required: true,
-  },
   type: {
     type: String,
-    enum: ['Point'],
     required: true,
   },
-    latitude: {
-      type: Number,
-      required: true,
-    },
-  longitude: {
-      type: Number,
-      required: true,
-    },
-  owner:{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', 
-      required: true,
-    },
-  social_media:[{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'SocialMedia', 
-    }],
+  category: {
+    type: String,
+    required: true,
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   google_id: {
-      type: String,
-    },
+    type: String,
+  },
+  plus_code: {
+    compound_code: String,
+    global_code: String,
+  },
   google_rating: {
-      type: String,
+    type: String,
   },
   media: [
-      {
-        url: String,  
-        type: String, 
-      },
-    ],
+    {
+      url: String,
+      type: String,
+    },
+  ],
   address: {
+    formatted_address: String,
     street: String,
     city: String,
     state: String,
     postalCode: String,
     country: String,
-    complete_address:String
+    complete_address: String,
+    latitude: {
+      type: Number,
+      required: true,
+    },
+    longitude: {
+      type: Number,
+      required: true,
+    },
   },
-  category: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category', 
-  }],
-  events:[{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Event', 
-  }],
-  comments: [
+  category: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Comment', 
-      required: false,
+      ref: "Category",
+    },
+  ],
+  posts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
+  events: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event",
+    },
+  ],
+  lists: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "List",
     },
   ],
 });
 
-placeSchema.index({ location: '2dsphere' });
+placeSchema.index({ location: "2dsphere" });
 placeSchema.plugin(timestamps);
 
-const Place = mongoose.model('Place', placeSchema);
+const Place = mongoose.model("Place", placeSchema);
 
 module.exports = Place;
