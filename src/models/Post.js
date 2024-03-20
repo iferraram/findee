@@ -8,14 +8,45 @@ const postSchema = new mongoose.Schema({
   },
   description: String,
   suggestions: String,
+  post_type: String,
   place: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Place",
     required: true,
   },
   event: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Event",
+    isEvent: Boolean,
+    capacity: Number,
+    event_time: {
+      date: Date,
+      time: {
+        isAllDay: Boolean,
+        start: String,
+        end: String,
+        timezone: String,
+      },
+    },
+    organizers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+    ],
+    rsvp: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        status: {
+          type: String,
+          enum: ["going", "interested", "not-going"],
+        },
+        attended: Boolean,
+      },
+    ],
   },
   cost: {
     start_price: Number,
@@ -40,6 +71,11 @@ const postSchema = new mongoose.Schema({
       required: false,
     },
   ],
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 postSchema.plugin(timestamps);
